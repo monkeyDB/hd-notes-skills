@@ -1,17 +1,4 @@
-## 话袋笔记 API 详细参考（HTTP /open/api/v1）
-
-话袋 HTTP API 路由入口见：`app/http/api/route/route.go`
-
-
-| 话袋 code | message | 含义/说明 |
-|---:|---|---|
-| 200 | 请求成功 | 成功 |
-| 400000 | 客户端请求错误 | 参数/业务校验失败 |
-| 400001 | 未授权/未登录 | token 缺失或失效（部分逻辑会走 HTTP 400） |
-| 400003 | 无权限 | 一般配合 HTTP 403 |
-| 400018 | 笔记未找到 | 资源不存在 |
-| 500000 | 系统错误 | 内部错误/依赖错误 |
-
+## 话袋笔记 API 详细参考
 
 ## 目录
 
@@ -20,9 +7,7 @@
 3. [错误码表（code）](#错误码表code)
 4. [新建笔记（Block）](#新建笔记block)
 5. [更新笔记（Block）](#更新笔记block)
-6. [删除笔记（Block）](#删除笔记block)
-7. [搜索笔记（全文检索）](#搜索笔记全文检索)
-8. [新建/更新长笔记（事务）](#新建更新长笔记事务)
+6. [搜索笔记（全文检索）](#搜索笔记全文检索)
 
 ---
 
@@ -106,8 +91,7 @@
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `unique_id` | string | 是 | 笔记唯一ID（客户端生成或由上游分配） |
-| `type` | int | 是 | 笔记类型（枚举） |
-| `content` | array | 否 | 笔记内容（结构化 JSON） |
+| `content` | array | 否 |  Markdown 格式正文|
 | `attr` | object | 否 | 扩展属性 |
 | `create_time` | uint64 | 是 | 创建时间（秒级时间戳） |
 | `parent_id` | string | 否 | 父笔记 unique_id（子笔记/追记） |
@@ -131,7 +115,7 @@
 
 ### 接口（推荐：更新内容/属性）
 
-- **方法/路径**：`POST /open/api/v1/block/update-content`
+- **方法/路径**：`POST /open/api/v1/block/update-block`
 
 ### 请求体（核心字段）
 
@@ -139,9 +123,8 @@
 |------|------|------|------|
 | `unique_id` | string | 是 | 笔记唯一ID |
 | `type` | int | 是 | 笔记类型（枚举） |
-| `content` | array | 否 | 内容（不传则不改） |
+| `content` | array | 否 | 传 **JSON 字符串** 表示正文 **Markdown** |
 | `attr` | object | 否 | 属性（不传则不改） |
-| `number_of_words` | int64 | 否 | 字数（可不传，由服务端计算） |
 | `block_tags` | array | 否 | 标签变更列表（含 action） |
 | `quotes` | array | 否 | 引用列表 |
 | `skin` | object | 否 | 皮肤 |
@@ -181,9 +164,8 @@ curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/upload-block' \
   -H 'Content-Type: application/json' \
   -d '{
     "unique_id": "unique_id", #笔记的unique_id，标识笔记
-    "type": 1,
     "content": [
-      { "insert": "hello from openapi\n", "attributes": { "type": "text" } }
+      { "insert": "传 **JSON 字符串** 表示正文 **Markdown**" } 
     ],
     "is_collect": 0,
     "is_todo": 0,
@@ -192,29 +174,21 @@ curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/upload-block' \
   }'
 
 # 2. 更新笔记（内容/属性）
-curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/update-content' \
+curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/update-block' \
   -H 'USER_UUID: {user_uuid}' \  
   -H 'Authorization: {api_key}' \
   -H 'X-Request-Id: {uuid}' \
   -H 'Content-Type: application/json' \
   -d '{
     "unique_id": "",
-    "type": 1,
     "content": [
-      { "insert": "updated content\n", "attributes": { "type": "text" } }
+      { "insert": "传 **JSON 字符串** 表示正文 **Markdown**" }
     ],
     "number_of_words": 0
   }'
 
 # 3. 搜索笔记 
 curl -sS -X GET 'https://openapi.ihuadai.cn/open/api/v1/search?query=hello&page=1&size=10' \
-  -H 'Version: 9.9.9' \
-  -H 'Source: wechat-mini-program' \
-  -H 'Device-Id: openclaw-test' \
   -H 'USER_UUID: {user_uuid}' \
   -H 'Authorization: {api_key}'
 ```
-
-注：
-用户的 unique_id：放在请求头 USER_UUID 里（也就是 HUADAI_USER_UUID），用于标识“谁在调用、数据归属到哪个用户”。
-笔记的 unique_id：放在请求体字段 unique_id 里，用于标识“这条笔记本身的 ID”（创建时你生成一个；更新时用它来定位要更新哪条笔记）。 

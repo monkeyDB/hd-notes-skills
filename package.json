@@ -1,17 +1,17 @@
 {
   "name": "huadai-notes",
   "version": "0.1.0",
-  "description": "话袋笔记 Skill — 通过 AI 保存、搜索与查看笔记。",
+  "description": "话袋笔记 Skill — 通过 AI 新建、更新和搜索个人笔记。",
   "license": "MIT-0",
   "author": "话袋 (Huadai)",
   "homepage": "https://ihuadai.cn",
-  "keywords": ["话袋", "笔记", "huadai", "notes", "openclaw", "skill", "知识库"],
+  "keywords": ["话袋", "笔记", "huadai", "notes", "openclaw", "skill"],
   "clawhub": {
     "acceptLicenseTerms": true
   },
   "openclaw": {
     "minVersion": "0.1.0",
-    "baseUrl": "______",
+    "baseUrl": "https://openapi.ihuadai.cn/open/api/v1",
     "requires": {},
     "optionalEnv": [
       "HUADAI_BASE_URL",

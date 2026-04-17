@@ -11,7 +11,7 @@
 
 ## 通用请求头（必须）
 
-见 `references/config.md`：
+见 [配置（必须先完成）](config.md#你需要准备什么)：
 
 - `USER_UUID: <user_uuid>`
 - `Authorization: <api_key>`
@@ -70,7 +70,7 @@ Query 参数（常用）：
 
 ## 常见错误
 
-见 `references/api-details.md`：
+见 [话袋笔记 API 详细参考 · 错误码表](api-details.md#错误码表code)：
 
 - `400000`：参数/业务校验失败
 - `400003`：无权限

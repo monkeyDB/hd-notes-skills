@@ -2,20 +2,20 @@
 
 ## 概述
 
-使用 **OAuth 2.0 Device Authorization Grant（Device Flow / 设备授权流程）** 让用户在浏览器中完成授权，换取 **API Key**，再写入本地/运行环境配置。适用于「配置话袋笔记」「连接话袋」等场景；首次调用开放接口前若缺少凭证，也应引导用户走本流程。
+使用 **OAuth 2.0 Device Authorization Grant** 让用户在浏览器中完成授权，换取 **API Key**，再写入本地/运行环境配置。适用于「配置话袋笔记」「连接话袋」等场景；首次调用开放接口前若缺少凭证，也应引导用户走本流程。
 
-话袋开放接口的调用侧模型（详见 `config.md`、`api-details.md`）为：
+话袋开放接口的调用侧模型（详见 [配置（必须先完成）](config.md)、[话袋笔记 API 详细参考](api-details.md)）为：
 
 - **`USER_UUID` 请求头**：与话袋用户 **`unique_id`** 一致，用于**唯一标识用户**与数据归属；配置为环境变量 **`HUADAI_USER_UUID`**。在多人聊天场景中，用于划定「仅该用户」可访问的笔记边界，保证**私密性**。
 - **`Authorization` 请求头**：值为 **API Key**，用于**身份校验与鉴权登录**（证明调用方为已授权用户），配置为 **`HUADAI_API_KEY`**。
 
-> 说明：OAuth 步骤里的「授权轮询码」仅用于向 `/oauth/token` **兑换**上述凭证；它不是 `unique_id`，也不是“设备号/设备绑定标识”。话袋笔记 Skill **不做设备绑定**、也不使用 `Device-Id` 之类的请求头。HTTP 请求体中的 `grant_type: "device_code"` 为 OAuth 协议固定字面量，与 `USER_UUID` / `unique_id` 含义无关。
+> 说明：OAuth 步骤里的「授权轮询码」仅用于向 `/oauth/token` **兑换**上述凭证；它不是“设备号/设备绑定标识”。话袋笔记 Skill **不做设备绑定**、也不使用 `Device-Id` 之类的请求头。
 
 ---
 
 ## 自动触发条件
 
-每次调用开放 API 前，先检查是否已具备调用所需配置（至少 **`HUADAI_API_KEY`**，以及受保护接口要求的 **`HUADAI_USER_UUID`**，见 `config.md`）。
+每次调用 API 前，先检查是否已具备调用所需配置（至少 **`HUADAI_API_KEY`**，以及受保护接口要求的 **`HUADAI_USER_UUID`**，见 [配置（必须先完成）](config.md)）。
 
 若缺失，**应发起 OAuth 授权流程**（无需用户先说「配置」），说明需要先完成授权再使用；授权完成并写入配置后，再继续执行用户原本请求。
 
@@ -23,8 +23,8 @@
 
 ## 手动配置（可选）
 
-1. 确认对外网关根地址 **`HUADAI_BASE_URL`**（与 `SKILL.md` 中唯一 Base URL 一致。
-2. 通过下文 Device Flow 完成授权，拿到 **`api_key`** 与 **`unique_id`**（用户唯一标识）。
+1. 前往 [话袋开放平台](https://ihuadai.cn/openapi) 创建应用
+2. 获取 **`api_key`** 与 **`unique_id`**（用户唯一标识）。
 3. 在 `~/.openclaw/openclaw.json`（或当前环境的 Skill 配置）中注入环境变量，**不要在聊天中回显密钥**：
 
 ```json
@@ -35,7 +35,7 @@
         "env": {
           "HUADAI_BASE_URL": "https://openapi.ihuadai.cn/open/api/v1",
           "HUADAI_API_KEY": "hk_live_你的key",
-          "HUADAI_USER_UUID": "与unique_id一致的用户标识"
+          "HUADAI_USER_UUID": "用户标识"
         }
       }
     }
@@ -43,31 +43,37 @@
 }
 ```
 
-> 说明：默认情况下，话袋服务端会为 OpenClaw 预注册一个固定 `client_id`，Skill **无需用户手动提供 `HUADAI_CLIENT_ID`**。
-> 如需覆盖（企业自建/灰度），可选提供 `HUADAI_CLIENT_ID`。
-
 ---
 
 ## Device Flow 完整流程
 
-以下路径均相对于 **`HUADAI_BASE_URL`**（已包含 `/open/api/v1` 前缀），与 `api-details.md` 一致。
+以下路径均相对于 **`HUADAI_BASE_URL`**（已包含 `/open/api/v1` 前缀），与 [话袋笔记 API 详细参考](api-details.md) 一致。
 
 ### 步骤 1：申请授权码
 
 ```
-POST {HUADAI_BASE_URL}/oauth/device/code
+POST https://openapi.ihuadai.cn/open/api/v1/oauth/device/code
 Content-Type: application/json
 ```
 
-请求体示例：
+请求体（与 `scripts/oauth_poll.py` 一致）：
+
+- **默认（推荐）**：使用预注册应用，请求体为 **空 JSON 对象**：
+
+```json
+{}
+```
+
+- **覆盖 `client_id`（企业自建等）**：在环境变量中设置 `HUADAI_CLIENT_ID` 后，请求体为：
 
 ```json
 {
-  "client_id": "{HUADAI_CLIENT_ID（可选覆盖）}"
+  "client_id": "<你的 HUADAI_CLIENT_ID>"
 }
 ```
 
-成功时，响应可能为话袋统一结构（`code` + `data`），或网关兼容形态（`success` + `data`）。**以实际服务端为准**。
+> 说明：默认情况下话袋服务端为 OpenClaw 预注册固定 `client_id`，**无需**在请求里传 `client_id`，也**无需**配置 `HUADAI_CLIENT_ID`。仅在需要覆盖时配置环境变量并随请求发送。
+
 
 **统一结构示例**：
 
@@ -78,21 +84,6 @@ Content-Type: application/json
   "data": {
     "code": "abc123...",
     "verification_uri": "https://openapi.ihuadai.cn/api/v1/oauth/authorize?code=abc123...",
-    "user_code": "ABCD-1234",
-    "expires_in": 600,
-    "interval": 5
-  }
-}
-```
-
-**兼容形态示例**：
-
-```json
-{
-  "success": true,
-  "data": {
-    "code": "abc123...",
-    "verification_uri": "https://example.com/open/api/v1/oauth/authorize?code=abc123...",
     "user_code": "ABCD-1234",
     "expires_in": 600,
     "interval": 5
@@ -128,15 +119,23 @@ POST {HUADAI_BASE_URL}/oauth/token
 Content-Type: application/json
 ```
 
-请求体：
+其中 `{HUADAI_BASE_URL}` 须与步骤 1 一致（例如 `https://openapi.ihuadai.cn/open/api/v1`），完整示例：
+
+```
+POST https://openapi.ihuadai.cn/open/api/v1/oauth/token
+Content-Type: application/json
+```
+
+请求体（`grant_type` 与 `code` 必填；`client_id` 仅在与步骤 1 一致地使用了 `HUADAI_CLIENT_ID` 时需要带上）：
 
 ```json
 {
   "grant_type": "device_code",
-  "client_id": "{HUADAI_CLIENT_ID}",
   "code": "{data.code}"
 }
 ```
+
+若已设置 `HUADAI_CLIENT_ID`，则请求体需额外包含 `"client_id": "<与步骤 1 相同的值>"`。
 
 **轮询策略**：
 
@@ -148,7 +147,7 @@ Content-Type: application/json
 
 ```bash
 export HUADAI_BASE_URL="https://openapi.ihuadai.cn/open/api/v1"
-export HUADAI_CLIENT_ID="cli_xxx"
+# 可选：export HUADAI_CLIENT_ID="你的 client_id"
 result=$(python scripts/oauth_poll.py "{data.code}")
 api_key=$(echo "$result" | jq -r '.api_key')
 user_uuid=$(echo "$result" | jq -r '.unique_id // .user_uuid // empty')
@@ -163,8 +162,8 @@ user_uuid=$(echo "$result" | jq -r '.unique_id // .user_uuid // empty')
 exec: python scripts/oauth_poll.py "{code}"
   background: true
   env:
-    HUADAI_BASE_URL: "https://openapi.ihuadai.cn"
-    HUADAI_CLIENT_ID: "cli_xxx"
+    HUADAI_BASE_URL: "https://openapi.ihuadai.cn/open/api/v1"
+    # 可选：HUADAI_CLIENT_ID: "你的 client_id"
 
 process: poll
   sessionId: {sessionId}
@@ -199,30 +198,16 @@ process: poll
 }
 ```
 
-兼容形态示例：
-
-```json
-{
-  "success": true,
-  "data": {
-    "client_id": "cli_xxx",
-    "api_key": "hk_live_xxx",
-    "key_id": "abc123",
-    "expires_at": 1742000000
-  }
-}
-```
-
 | 字段 | 说明 |
 |------|------|
 | `api_key` | 写入 **`HUADAI_API_KEY`**，用于 **`Authorization`** 鉴权登录 |
 | `unique_id` / `user_uuid`（若返回） | 写入 **`HUADAI_USER_UUID`**，对应 **`USER_UUID`**，与话袋用户唯一标识一致 |
-| `client_id` | 写入 **`HUADAI_CLIENT_ID`**，用于 OAuth 授权流程（申请设备码/轮询 token） |
+| `client_id`（若返回） | 可选写入 **`HUADAI_CLIENT_ID`**，便于下次自建应用覆盖时与本次授权一致；使用预注册应用时通常不必保存 |
 | `expires_at` | 若存在，为 API Key 等相关过期时间（Unix 秒），可在提示文案中使用 |
 
 ### 步骤 4：写入配置并校验
 
-将 **`HUADAI_API_KEY`**、**`HUADAI_USER_UUID`**（与 **`unique_id`** 一致）、**`HUADAI_BASE_URL`**、**`HUADAI_CLIENT_ID`** 写入运行环境或 `openclaw.json`（示例见上文）。
+将 **`HUADAI_API_KEY`**、**`HUADAI_USER_UUID`**（与 **`unique_id`** 一致）、**`HUADAI_BASE_URL`** 写入运行环境或 `openclaw.json`（示例见上文）。**`HUADAI_CLIENT_ID`** 仅在需要固定为某自建应用、或希望与响应中的 `client_id` 对齐时再写入。
 
 告知用户时可说明：
 
@@ -234,6 +219,6 @@ process: poll
 
 ## 相关文档
 
-- 请求头与 env：`references/config.md`
-- HTTP 路径与响应结构：`references/api-details.md`
-- 轮询脚本：`scripts/oauth_poll.py`
+- [配置（必须先完成）](config.md)（请求头与环境变量）
+- [话袋笔记 API 详细参考](api-details.md)（HTTP 路径与统一响应）
+- 轮询脚本：仓库内 [`scripts/oauth_poll.py`](../scripts/oauth_poll.py)

@@ -1,44 +1,27 @@
 #!/usr/bin/env python3
 """
-话袋笔记：OAuth 设备码（Device Flow）脚本（申请设备码 + 轮询换取 API Key）
+话袋笔记：OAuth 设备码（Device Flow）脚本。
 
-话袋开放接口以 `references/api-details.md` / `config.md` 为准：
-- 请求头 **`USER_UUID`**：在话袋侧对应用户的 **`unique_id`**，用于对用户做唯一标识与归属；在群聊等多人场景下，Skill 只处理与已配置 **`HUADAI_USER_UUID`** 一致的用户，从而保证**私密性**。
-- 请求头 **`Authorization: <api_key>`**：**API Key 用于身份校验与鉴权登录**（验证调用方是否为合法授权用户）。
+用途：
+    申请设备码并轮询兑换凭证，拿到后续调用开放 API 所需的 `api_key`。
 
-请勿将 OAuth 兑换用的「授权轮询码」与 **`USER_UUID` / `unique_id`** 混用；本地配置使用 **`HUADAI_USER_UUID`**（值与 **`unique_id`** 一致）。
+两种用法：
+    1) 一键流程：申请设备码 → 提示用户授权 → 后台轮询兑换 `api_key`
+       python oauth_poll.py --start
+    2) 仅轮询：你已从 /oauth/device/code 拿到 device code（下称 auth_code）
+       python oauth_poll.py <auth_code>
 
-本脚本支持两种用法（方案 A：清晰分层，不混用）：
+环境变量：
+    HUADAI_BASE_URL  - OpenAPI 根地址（必填），例如 https://openapi.ihuadai.cn/open/api/v1（不含末尾斜杠）
+    HUADAI_CLIENT_ID - OAuth Client ID（可选）：未设置时申请设备码发 `{}`、换 token 不传 `client_id`，与话袋预注册应用一致；企业自建等场景再设置以覆盖
 
-1) **仅轮询**：你已经拿到了「授权轮询码」（device code），用它轮询 `/oauth/token` 兑换 **`api_key`**。
-2) **一键流程**：自动调用 `/oauth/device/code` 申请设备码，打印 `verification_uri` + `user_code` 给用户完成授权，然后后台轮询 `/oauth/token` 直到拿到 **`api_key`**。
+重要：
+    - auth_code（device code）用于轮询 `/oauth/token`，**不是** `USER_UUID` / `unique_id`
+    - 成功时 stdout 输出 `data` JSON（至少含 `api_key`；可能包含 `unique_id` 或 `user_uuid`）
+      - `api_key` 写入 HUADAI_API_KEY（请求头 Authorization）
+      - `unique_id/user_uuid` 写入 HUADAI_USER_UUID（请求头 USER_UUID）
 
-成功时均输出 `data` JSON（含 `api_key`，并保留服务端返回的 `unique_id/user_uuid` 以写入 `HUADAI_USER_UUID`）。
-其中 HTTP 请求体里的 `grant_type` 取值为 OAuth 2.0 Device Flow 的固定字面量（与话袋侧 `USER_UUID`/`unique_id` 含义无关；本 Skill 不做设备绑定，也不需要 `Device-Id`）。
-
-与 `api-details.md` 一致：成功响应多为 { "code": 200, "data": { ... } }；亦兼容 { "success": true, "data": { ... } }。
-
-用法:
-    export HUADAI_BASE_URL="https://<your-domain>/open/api/v1"   # 必填，不含末尾斜杠
-    # 方式 A：一键申请设备码并轮询
-    python oauth_poll.py --start
-
-    # 方式 B：仅轮询（你已从 /oauth/device/code 拿到 code）
-    python oauth_poll.py <auth_code>
-
-环境变量:
-    HUADAI_BASE_URL  - 话袋 OpenAPI 根地址（必填）
-    HUADAI_CLIENT_ID - 应用 ID（必填，OAuth 流程使用；与 user_uuid/unique_id 无关）
-
-参数:
-    auth_code  - 授权轮询码（由 POST /open/api/v1/oauth/device/code 返回；用于兑换凭证，**不是** USER_UUID）
-
-返回:
-    成功: stdout 输出 `data` 的 JSON。请将其中的 **`api_key`** 写入 `HUADAI_API_KEY`（鉴权登录）；
-          若包含 **`unique_id`** 或与之一致的 **`user_uuid`**，写入 **`HUADAI_USER_UUID`**，对应请求头 **`USER_UUID`**（多人聊天中的用户边界）。
-    失败: stderr 说明，非零退出码
-
-退出码:
+退出码：
     0 - 授权成功
     1 - 参数/环境错误
     2 - 用户拒绝授权
@@ -47,14 +30,11 @@
     5 - 未知错误
     6 - 轮询超时
 
-示例:
-    export HUADAI_BASE_URL="https://api.example.com/open/api/v1"
-    # 一键流程
+示例：
+    export HUADAI_BASE_URL="https://openapi.ihuadai.cn/open/api/v1"
+    # 可选：export HUADAI_CLIENT_ID="你的 client_id"
     result=$(python oauth_poll.py --start)
-    # 或仅轮询
-    # result=$(python oauth_poll.py "abc123...")
     api_key=$(echo "$result" | jq -r '.api_key')
-    # unique_id 与 USER_UUID 对应；部分响应可能字段名为 user_uuid
     user_uuid=$(echo "$result" | jq -r '.unique_id // .user_uuid // empty')
 """
 
@@ -73,7 +53,7 @@ def _base_url() -> str:
     base = (os.environ.get("HUADAI_BASE_URL") or "").strip().rstrip("/")
     if not base:
         print(
-            "缺少环境变量 HUADAI_BASE_URL（话袋 OpenAPI 根地址，例如 https://openapi.ihuadai.cn）",
+            "缺少环境变量 HUADAI_BASE_URL（话袋 OpenAPI 根地址，例如 https://openapi.ihuadai.cn/open/api/v1）",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -123,16 +103,6 @@ def _request_json(url: str, payload: bytes, headers: dict) -> dict:
 def _maybe_client_id() -> str:
     return (os.environ.get("HUADAI_CLIENT_ID") or "").strip()
 
-def _client_id() -> str:
-    cid = _maybe_client_id()
-    if not cid:
-        print(
-            "缺少环境变量 HUADAI_CLIENT_ID（OAuth 流程所需的应用 ID，例如 cli_xxx）",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    return cid
-
 
 def request_device_code(api_url: str) -> dict:
     """
@@ -141,7 +111,8 @@ def request_device_code(api_url: str) -> dict:
     - 不需要 client_id：发送 {}
     - 需要 client_id：若设置了 HUADAI_CLIENT_ID，则发送 {"client_id": "..."}
     """
-    body_dict = {"client_id": _client_id()}
+    cid = _maybe_client_id()
+    body_dict = {"client_id": cid} if cid else {}
 
     body = json.dumps(body_dict).encode("utf-8")
     headers = {"Content-Type": "application/json"}
@@ -178,7 +149,10 @@ def request_device_code(api_url: str) -> dict:
 def poll_token(auth_code: str, api_url: str) -> dict:
     # grant_type 为 OAuth 2.0 Device Flow 在 token 端点的固定取值；本 Skill 不做设备绑定、不需要 Device-Id。
     # 话袋用户唯一标识见请求头 USER_UUID（值同 unique_id，见 HUADAI_USER_UUID）。
-    body_dict = {"grant_type": "device_code", "client_id": _client_id(), "code": auth_code}
+    cid = _maybe_client_id()
+    body_dict: dict = {"grant_type": "device_code", "code": auth_code}
+    if cid:
+        body_dict["client_id"] = cid
 
     body = json.dumps(body_dict).encode("utf-8")
     headers = {"Content-Type": "application/json"}

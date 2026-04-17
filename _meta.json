@@ -3,7 +3,7 @@
   "name": "话袋笔记",
   "owner": "huadai",
   "version": "0.1.0",
-  "description": "话袋笔记 OpenClaw Skill：通过 AI 保存、搜索与查看个人笔记；使用话袋开放 API（USER_UUID/unique_id + API Key 鉴权）。",
+  "description": "话袋笔记 OpenClaw Skill：通过 AI 新建、更新和搜索个人笔记；使用话袋开放 API（USER_UUID/unique_id + API Key 鉴权）。",
   "homepage": "https://ihuadai.cn",
   "license": "MIT-0",
   "keywords": ["话袋", "huadai", "笔记", "notes", "openclaw", "skill", "知识库"]

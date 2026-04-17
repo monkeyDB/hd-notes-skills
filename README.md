@@ -69,7 +69,7 @@
 ## 安装
 
 
-### 方式一：通过 ClawHub/SkillHub/SkillHub（腾讯中国）  安装（推荐）
+### 方式一：通过 ClawHub/SkillHub（腾讯）/SkillHub（中国）  安装（推荐）
 
 ```bash
 clawhub install huadai-notes-skill
@@ -102,7 +102,7 @@ curl -sL <YOUR_GITHUB_RAW_PACKAGE_JSON_URL> -o package.json
 
 ### 自动配置（默认）
 
-安装后首次使用时，若检测到缺少配置，AI 会自动触发 OAuth Device Flow（见 `references/oauth.md`）：
+安装后首次使用时，若检测到缺少配置，AI 会自动触发 OAuth Device Flow（详见 [OAuth 授权配置（话袋笔记）](references/oauth.md)）：
 
 1. 你发起任意笔记相关操作（保存/搜索/打开）
 2. AI 检测到未配置 `HUADAI_API_KEY` / `HUADAI_USER_UUID`
@@ -111,7 +111,7 @@ curl -sL <YOUR_GITHUB_RAW_PACKAGE_JSON_URL> -o package.json
 
 ### 手动配置（可选）
 
-在 `~/.openclaw/openclaw.json` 中注入（示例见 `references/config.md` / `references/oauth.md`）：
+在 `~/.openclaw/openclaw.json` 中注入（示例见 [配置（必须先完成）](references/config.md)、[OAuth 授权配置](references/oauth.md)）：
 
 - `HUADAI_BASE_URL`: `https://openapi.ihuadai.cn/open/api/v1`
 - `HUADAI_API_KEY`: OAuth 换取的 `api_key`
@@ -121,14 +121,14 @@ curl -sL <YOUR_GITHUB_RAW_PACKAGE_JSON_URL> -o package.json
 此 Skill 需要在运行环境中提供以下环境变量（不要在聊天中粘贴任何密钥）：
 
 - `HUADAI_BASE_URL`（必填）：话袋 OpenAPI 根地址（例如 `https://openapi.ihuadai.cn/open/api/v1`）
-- `HUADAI_CLIENT_ID`（可选覆盖，仅 OAuth）：OAuth Device Flow 的应用标识（申请设备码/换取 API Key）
+- `HUADAI_CLIENT_ID`（可选覆盖，仅 OAuth）：OAuth Device Flow 的应用标识（申请设备码/换取 API Key；流程见 [OAuth 授权配置](references/oauth.md)）
 - `HUADAI_API_KEY`（必填）：业务 API 调用鉴权（请求头 `Authorization`）
 - `HUADAI_USER_UUID`（强烈建议，群聊/多人场景必配）：用户唯一标识（与话袋用户`unique_id` 一致，对应请求头 `USER_UUID`）
 
 ## Base URL 与接口路径
 
 - Base URL：`https://openapi.ihuadai.cn/open/api/v1`
-- API 路径：以本仓库 `references/` 为准（统一 `/open/api/v1/...`）
+- API 路径：以本仓库 **references** 为准（统一 `/open/api/v1/...`）；接口分册：[新建笔记（Upload）](references/upload.md)、[更新笔记（Update）](references/update.md)、[搜索笔记（Search）](references/search.md)、[API 详细参考](references/api-details.md)
 
 ## 安全说明
 
