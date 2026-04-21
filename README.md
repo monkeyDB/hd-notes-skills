@@ -72,31 +72,24 @@
 ### 方式一：通过 ClawHub/SkillHub（腾讯）/SkillHub（中国）  安装（推荐）
 
 ```bash
-clawhub install huadai-notes-skill
-SkillHub install huadai-notes-skill
-SkillHub install huadai-notes-skill
+clawhub install huadai-notes-skills
+SkillHub install huadai-notes-skills
+SkillHub install huadai-notes-skills
 ```
 
 ### 方式二：让 AI 助手安装
 
-> 帮我安装话袋笔记 Skill，地址是 <YOUR_GITHUB_RAW_SKILL_MD_URL>
+> 帮我安装话袋笔记 Skill，地址是 https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md
 
 ### 方式三：手动安装
 
 ```bash
 mkdir -p ~/.openclaw/workspace/skills/huadai-notes-skill
 cd ~/.openclaw/workspace/skills/huadai-notes-skill
-curl -sL <YOUR_GITHUB_RAW_SKILL_MD_URL> -o SKILL.md
-curl -sL <YOUR_GITHUB_RAW_PACKAGE_JSON_URL> -o package.json
+curl -sL https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md -o SKILL.md
+curl -sL https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md -o package.json
 ```
 
-> 上述 `<YOUR_GITHUB_RAW_...>` 是 GitHub Raw 文件直链，格式一般为：
->
-> - `https://raw.githubusercontent.com/<owner>/<repo>/<ref>/SKILL.md`
-> - `https://raw.githubusercontent.com/<owner>/<repo>/<ref>/package.json`
-
----
-将本目录作为一个 Skill 安装到你的工作流中（具体安装方式以你当前版本为准）。
 
 ## 配置（重要）
 
@@ -123,7 +116,7 @@ curl -sL <YOUR_GITHUB_RAW_PACKAGE_JSON_URL> -o package.json
 - `HUADAI_BASE_URL`（必填）：话袋 OpenAPI 根地址（例如 `https://openapi.ihuadai.cn/open/api/v1`）
 - `HUADAI_CLIENT_ID`（可选覆盖，仅 OAuth）：OAuth Device Flow 的应用标识（申请设备码/换取 API Key；流程见 [OAuth 授权配置](references/oauth.md)）
 - `HUADAI_API_KEY`（必填）：业务 API 调用鉴权（请求头 `Authorization`）
-- `HUADAI_USER_UUID`（强烈建议，群聊/多人场景必配）：用户唯一标识（与话袋用户`unique_id` 一致，对应请求头 `USER_UUID`）
+- `HUADAI_USER_UUID`（强烈建议，群聊/多人场景必配）：用户唯一标识
 
 ## Base URL 与接口路径
 
@@ -141,11 +134,9 @@ curl -sL <YOUR_GITHUB_RAW_PACKAGE_JSON_URL> -o package.json
 ## 📜 相关链接
 
 - [话袋官网](https://ihuadai.cn/)
-- [开放平台](https://ihuadai.cn/openapi)
 - [ClawHub](https://clawhub.ai/----/ihuadai.cn)
 - [SkillHub腾讯](https://skillhub.tencent.com/-----/ihuadai.cn)
 - [SkillHub中国](https://www.skill-cn.com//-----/ihuadai.cn)
-- [开通会员](https://ihuadai.cn/-----)
 
 ---
 
