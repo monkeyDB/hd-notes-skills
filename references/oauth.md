@@ -6,7 +6,7 @@
 
 话袋开放接口的调用侧模型（详见 [配置（必须先完成）](config.md)、[话袋笔记 API 详细参考](api-details.md)）为：
 
-- **`USER_UUID` 请求头**：与话袋用户 **`unique_id`** 一致，用于**唯一标识用户**与数据归属；配置为环境变量 **`HUADAI_USER_UUID`**。在多人聊天场景中，用于划定「仅该用户」可访问的笔记边界，保证**私密性**。
+- **`USER-UUID` 请求头**：与话袋用户 **`unique_id`** 一致，用于**唯一标识用户**与数据归属；配置为环境变量 **`HUADAI_USER_UUID`**。在多人聊天场景中，用于划定「仅该用户」可访问的笔记边界，保证**私密性**。
 - **`Authorization` 请求头**：值为 **API Key**，用于**身份校验与鉴权登录**（证明调用方为已授权用户），配置为 **`HUADAI_API_KEY`**。
 
 > 说明：OAuth 步骤里的「授权轮询码」仅用于向 `/oauth/token` **兑换**上述凭证；它不是“设备号/设备绑定标识”。话袋笔记 Skill **不做设备绑定**、也不使用 `Device-Id` 之类的请求头。
@@ -180,7 +180,7 @@ process: poll
 | `already_consumed` | 授权码已使用 | 停止轮询；可能已在其他终端完成 |
 | `data` 中含 `api_key` | 授权成功 | 进入步骤 4 |
 
-**授权成功**时，`data` 中至少包含 **`api_key`**；若返回 **`unique_id`** 或 **`user_uuid`**，应与请求头 **`USER_UUID`** 一致，并写入 **`HUADAI_USER_UUID`**。
+**授权成功**时，`data` 中至少包含 **`api_key`**；若返回 **`unique_id`** 或 **`user_uuid`**，应与请求头 **`USER-UUID`** 一致，并写入 **`HUADAI_USER_UUID`**。
 
 成功响应示例（统一结构）：
 
@@ -201,7 +201,7 @@ process: poll
 | 字段 | 说明 |
 |------|------|
 | `api_key` | 写入 **`HUADAI_API_KEY`**，用于 **`Authorization`** 鉴权登录 |
-| `unique_id` / `user_uuid`（若返回） | 写入 **`HUADAI_USER_UUID`**，对应 **`USER_UUID`**，与话袋用户唯一标识一致 |
+| `unique_id` / `user_uuid`（若返回） | 写入 **`HUADAI_USER_UUID`**，对应 **`USER-UUID`**，与话袋用户唯一标识一致 |
 | `client_id`（若返回） | 可选写入 **`HUADAI_CLIENT_ID`**，便于下次自建应用覆盖时与本次授权一致；使用预注册应用时通常不必保存 |
 | `expires_at` | 若存在，为 API Key 等相关过期时间（Unix 秒），可在提示文案中使用 |
 
@@ -212,7 +212,7 @@ process: poll
 告知用户时可说明：
 
 - 已可使用话袋笔记 Skill 的保存、搜索等能力；
-- **不要在对话中粘贴或展示完整 Key 与 USER_UUID**；
+- **不要在对话中粘贴或展示完整 Key 与 USER-UUID**；
 - 多人场景下仅绑定配置中的 **`HUADAI_USER_UUID`** 对应用户，避免他人访问同一笔记数据。
 
 ---

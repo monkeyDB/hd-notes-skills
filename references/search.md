@@ -13,7 +13,7 @@
 
 见 [配置（必须先完成）](config.md#你需要准备什么)：
 
-- `USER_UUID: <user_uuid>`
+- `USER-UUID: <user_unique_id>`
 - `Authorization: <api_key>`
 
 ---

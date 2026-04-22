@@ -25,7 +25,7 @@ metadata:
 
 - **唯一 Base URL**：`https://openapi.ihuadai.cn/open/api/v1`（禁止使用其他域名或自行拼接根域）
 - **开放 API 文档**：以话袋官方发布为准（此仓库以 `references/` 内文档为最终对接依据）
-- **鉴权与必需请求头**：`HUADAI_API_KEY`**（`Authorization`）及 **`HUADAI_USER_UUID`**（`USER_UUID`，与话袋用户 `unique_id` 一致）
+- **鉴权与必需请求头**：`HUADAI_API_KEY`**（`Authorization`）及 **`HUADAI_USER_UUID`**（`USER-UUID`，与话袋用户 `unique_id` 一致）
 - **OAuth（设备码）**：按 [OAuth 授权配置](references/oauth.md) 执行；默认使用服务端预注册的固定 `client_id`，一般**只需要**配置 `HUADAI_BASE_URL` 即可走授权。仅在需要覆盖时才配置 `HUADAI_CLIENT_ID`。
 - **调用前检查配置**：若未配置 `HUADAI_API_KEY` / `HUADAI_USER_UUID`（业务请求）或未配置 `HUADAI_BASE_URL`（走 OAuth 时），必须停止调用并引导用户在本地配置；禁止假装成功
 - **数据真实性**：所有笔记内容、列表、详情都必须来自 API 响应；禁止编造笔记、ID、space_id 等

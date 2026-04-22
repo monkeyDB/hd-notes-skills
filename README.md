@@ -108,7 +108,7 @@ curl -sL https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md -o pa
 
 - `HUADAI_BASE_URL`: `https://openapi.ihuadai.cn/open/api/v1`
 - `HUADAI_API_KEY`: OAuth 换取的 `api_key`
-- `HUADAI_USER_UUID`: OAuth 返回的用户 `unique_id`（对应请求头 `USER_UUID`）
+- `HUADAI_USER_UUID`: OAuth 返回的用户 `unique_id`（对应请求头 `USER-UUID`）
 - `HUADAI_CLIENT_ID`: 可选覆盖；默认使用服务端预注册 `client_id`
 
 此 Skill 需要在运行环境中提供以下环境变量（不要在聊天中粘贴任何密钥）：
