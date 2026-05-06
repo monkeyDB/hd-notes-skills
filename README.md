@@ -69,28 +69,25 @@
 ## 安装
 
 
-### 方式一：通过 ClawHub/SkillHub（腾讯）/SkillHub（中国）  安装（推荐）
+### 方式一：通过 CLI 安装，需提前下载CLI（推荐）
 
 ```bash
-  # ClawHub                                                                                                                    
-  clawhub install hd-notes-skills                                                                             
-                                                                                                                               
-  # SkillHub（腾讯）                                                                                        
-  skillhub install hd-notes-skills                                                                                 
-                                                                                                                            
+                                                     
+# 从 ClawHub 安装（OpenClaw 原生支持）
+openclaw skills install hd-notes-skills
+
+# 从 SkillHub（腾讯）安装
+skillhub install hd-notes-skills  
+                                                                                                                          
 ```
 
-### 方式二：让 AI 助手安装
-
-> 帮我安装话袋笔记 Skill，地址是 https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md
-
-### 方式三：手动安装
+### 方式二：手动安装（无需任何 CLI）
 
 ```bash
 mkdir -p ~/.openclaw/workspace/skills/huadai-notes-skill
 cd ~/.openclaw/workspace/skills/huadai-notes-skill
-curl -sL https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md -o SKILL.md
-curl -sL https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md -o package.json
+curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/SKILL.md -o SKILL.md
+curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/package.json -o package.json
 ```
 
 
@@ -137,9 +134,9 @@ curl -sL https://github.com/HuadaiNotes/hd_notes_skills/blob/main/SKILL.md -o pa
 ## 📜 相关链接
 
 - [话袋官网](https://ihuadai.cn/)
-- [ClawHub](https://clawhub.ai/----/ihuadai.cn)
-- [SkillHub腾讯](https://skillhub.tencent.com/-----/ihuadai.cn)
-- [SkillHub中国](https://www.skill-cn.com//-----/ihuadai.cn)
+- [ClawHub](https://clawhub.ai/monkeydb/hd-notes-skills)
+- [SkillHub腾讯](https://skillhub.cn/skills/hd-notes-skills)
+- [Github](https://github.com/monkeyDB/hd-notes-skills)
 
 ---
 
