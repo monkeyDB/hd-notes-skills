@@ -72,9 +72,12 @@
 ### 方式一：通过 ClawHub/SkillHub（腾讯）/SkillHub（中国）  安装（推荐）
 
 ```bash
-clawhub install huadai-notes-skills
-SkillHub install huadai-notes-skills
-SkillHub install huadai-notes-skills
+  # ClawHub                                                                                                                    
+  clawhub install hd-notes-skills                                                                             
+                                                                                                                               
+  # SkillHub（腾讯）                                                                                        
+  skillhub install hd-notes-skills                                                                                 
+                                                                                                                            
 ```
 
 ### 方式二：让 AI 助手安装
