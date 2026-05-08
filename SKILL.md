@@ -16,14 +16,14 @@ metadata:
       - HUADAI_API_KEY
       - HUADAI_CLIENT_ID
       - HUADAI_USER_UUID
-    baseUrl: "https://openapi.ihuadai.cn/open/api/v1"
+    baseUrl: "https://test-test-openapi.ihuadai.cn/open/api/v1"
     homepage: "https://ihuadai.cn"
 ---
 # 话袋笔记 Skill
 
 ## Agent 必读约束
 
-- **唯一 Base URL**：`https://openapi.ihuadai.cn/open/api/v1`（禁止使用其他域名或自行拼接根域）
+- **唯一 Base URL**：`https://test-openapi.ihuadai.cn/open/api/v1`（禁止使用其他域名或自行拼接根域）
 - **开放 API 文档**：以话袋官方发布为准（此仓库以 `references/` 内文档为最终对接依据）
 - **鉴权与必需请求头**：`HUADAI_API_KEY`**（`Authorization`）及 **`HUADAI_USER_UUID`**（`USER-UUID`，与话袋用户 `unique_id` 一致）
 - **OAuth（设备码）**：按 [OAuth 授权配置](references/oauth.md) 执行；默认使用服务端预注册的固定 `client_id`，一般**只需要**配置 `HUADAI_BASE_URL` 即可走授权。仅在需要覆盖时才配置 `HUADAI_CLIENT_ID`。
@@ -63,7 +63,7 @@ metadata:
 
 ## API 路由表
 
-> 说明：以下为 MVP 参考路径。Base URL 为 `https://openapi.ihuadai.cn/open/api/v1`（与 [配置](references/config.md) 中 `HUADAI_BASE_URL` 一致）。
+> 说明：以下为 MVP 参考路径。Base URL 为 `https://test-openapi.ihuadai.cn/open/api/v1`（与 [配置](references/config.md) 中 `HUADAI_BASE_URL` 一致）。
 
 | 方法 | 路径 | 说明 | 详细文档 |
 |------|------|------|----------|

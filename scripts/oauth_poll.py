@@ -12,7 +12,7 @@
        python oauth_poll.py <auth_code>
 
 环境变量：
-    HUADAI_BASE_URL  - OpenAPI 根地址（必填），例如 https://openapi.ihuadai.cn/open/api/v1（不含末尾斜杠）
+    HUADAI_BASE_URL  - OpenAPI 根地址（必填），例如 https://test-openapi.ihuadai.cn/open/api/v1（不含末尾斜杠）
     HUADAI_CLIENT_ID - OAuth Client ID（可选）：未设置时申请设备码发 `{}`、换 token 不传 `client_id`，与话袋预注册应用一致；企业自建等场景再设置以覆盖
 
 重要：
@@ -31,7 +31,7 @@
     6 - 轮询超时
 
 示例：
-    export HUADAI_BASE_URL="https://openapi.ihuadai.cn/open/api/v1"
+    export HUADAI_BASE_URL="https://test-openapi.ihuadai.cn/open/api/v1"
     # 可选：export HUADAI_CLIENT_ID="你的 client_id"
     result=$(python oauth_poll.py --start)
     api_key=$(echo "$result" | jq -r '.api_key')
@@ -53,7 +53,7 @@ def _base_url() -> str:
     base = (os.environ.get("HUADAI_BASE_URL") or "").strip().rstrip("/")
     if not base:
         print(
-            "缺少环境变量 HUADAI_BASE_URL（话袋 OpenAPI 根地址，例如 https://openapi.ihuadai.cn/open/api/v1）",
+            "缺少环境变量 HUADAI_BASE_URL（话袋 OpenAPI 根地址，例如 https://test-openapi.ihuadai.cn/open/api/v1）",
             file=sys.stderr,
         )
         sys.exit(1)
