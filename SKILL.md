@@ -23,6 +23,8 @@ metadata:
 
 ## Agent 必读约束
 
+
+
 - **唯一 Base URL**：`https://test-openapi.ihuadai.cn/open/api/v1`（禁止使用其他域名或自行拼接根域）
 - **开放 API 文档**：以话袋官方发布为准（此仓库以 `references/` 内文档为最终对接依据）
 - **鉴权与必需请求头**：`HUADAI_API_KEY`**（`Authorization`）及 **`HUADAI_USER_UUID`**（`USER-UUID`，与话袋用户 `unique_id` 一致）
