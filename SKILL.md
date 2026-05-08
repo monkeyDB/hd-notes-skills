@@ -16,7 +16,7 @@ metadata:
       - HUADAI_API_KEY
       - HUADAI_CLIENT_ID
       - HUADAI_USER_UUID
-    baseUrl: "https://test-test-openapi.ihuadai.cn/open/api/v1"
+    baseUrl: "https://test-openapi.ihuadai.cn/open/api/v1"
     homepage: "https://ihuadai.cn"
 ---
 # 话袋笔记 Skill
