@@ -106,21 +106,21 @@ curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/package
 
 在 `~/.openclaw/openclaw.json` 中注入（示例见 [配置（必须先完成）](references/config.md)、[OAuth 授权配置](references/oauth.md)）：
 
-- `HUADAI_BASE_URL`: `https://test-openapi.ihuadai.cn/open/api/v1`
+- `HUADAI_BASE_URL`: `https://openapi.ihuadai.cn/open/api/v1`
 - `HUADAI_API_KEY`: OAuth 换取的 `api_key`
 - `HUADAI_USER_UUID`: OAuth 返回的用户 `unique_id`（对应请求头 `USER-UUID`）
 - `HUADAI_CLIENT_ID`: 可选覆盖；默认使用服务端预注册 `client_id`
 
 此 Skill 需要在运行环境中提供以下环境变量（不要在聊天中粘贴任何密钥）：
 
-- `HUADAI_BASE_URL`（必填）：话袋 OpenAPI 根地址（例如 `https://test-openapi.ihuadai.cn/open/api/v1`）
+- `HUADAI_BASE_URL`（必填）：话袋 OpenAPI 根地址（例如 `https://openapi.ihuadai.cn/open/api/v1`）
 - `HUADAI_CLIENT_ID`（可选覆盖，仅 OAuth）：OAuth Device Flow 的应用标识（申请设备码/换取 API Key；流程见 [OAuth 授权配置](references/oauth.md)）
 - `HUADAI_API_KEY`（必填）：业务 API 调用鉴权（请求头 `Authorization`）
 - `HUADAI_USER_UUID`（强烈建议，群聊/多人场景必配）：用户唯一标识
 
 ## Base URL 与接口路径
 
-- Base URL：`https://test-openapi.ihuadai.cn/open/api/v1`
+- Base URL：`https://openapi.ihuadai.cn/open/api/v1`
 - API 路径：以本仓库 **references** 为准（统一 `/open/api/v1/...`）；接口分册：[新建笔记（Upload）](references/upload.md)、[更新笔记（Update）](references/update.md)、[搜索笔记（Search）](references/search.md)、[API 详细参考](references/api-details.md)
 
 ## 安全说明

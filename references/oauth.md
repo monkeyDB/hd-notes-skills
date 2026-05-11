@@ -33,7 +33,7 @@
     "entries": {
       "huadai-notes-skill": {
         "env": {
-          "HUADAI_BASE_URL": "https://test-openapi.ihuadai.cn/open/api/v1",
+          "HUADAI_BASE_URL": "https://openapi.ihuadai.cn/open/api/v1",
           "HUADAI_API_KEY": "hk_live_你的key",
           "HUADAI_USER_UUID": "用户标识"
         }
@@ -52,7 +52,7 @@
 ### 步骤 1：申请授权码
 
 ```
-POST https://test-openapi.ihuadai.cn/open/api/v1/oauth/device/code
+POST https://openapi.ihuadai.cn/open/api/v1/oauth/device/code
 Content-Type: application/json
 ```
 
@@ -119,10 +119,10 @@ POST {HUADAI_BASE_URL}/oauth/token
 Content-Type: application/json
 ```
 
-其中 `{HUADAI_BASE_URL}` 须与步骤 1 一致（例如 `https://test-openapi.ihuadai.cn/open/api/v1`），完整示例：
+其中 `{HUADAI_BASE_URL}` 须与步骤 1 一致（例如 `https://openapi.ihuadai.cn/open/api/v1`），完整示例：
 
 ```
-POST https://test-openapi.ihuadai.cn/open/api/v1/oauth/token
+POST https://openapi.ihuadai.cn/open/api/v1/oauth/token
 Content-Type: application/json
 ```
 
@@ -146,7 +146,7 @@ Content-Type: application/json
 **推荐使用本 Skill 自带脚本**（仓库内路径：`scripts/oauth_poll.py`）：
 
 ```bash
-export HUADAI_BASE_URL="https://test-openapi.ihuadai.cn/open/api/v1"
+export HUADAI_BASE_URL="https://openapi.ihuadai.cn/open/api/v1"
 # 可选：export HUADAI_CLIENT_ID="你的 client_id"
 result=$(python scripts/oauth_poll.py "{data.code}")
 api_key=$(echo "$result" | jq -r '.api_key')
@@ -162,7 +162,7 @@ user_uuid=$(echo "$result" | jq -r '.unique_id // .user_uuid // empty')
 exec: python scripts/oauth_poll.py "{code}"
   background: true
   env:
-    HUADAI_BASE_URL: "https://test-openapi.ihuadai.cn/open/api/v1"
+    HUADAI_BASE_URL: "https://openapi.ihuadai.cn/open/api/v1"
     # 可选：HUADAI_CLIENT_ID: "你的 client_id"
 
 process: poll
