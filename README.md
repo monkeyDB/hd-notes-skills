@@ -98,9 +98,9 @@ curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/package
 安装后首次使用时，若检测到缺少配置，AI 会自动触发 OAuth Device Flow（详见 [OAuth 授权配置（话袋笔记）](references/oauth.md)）：
 
 1. 你发起任意笔记相关操作（保存/搜索/打开）
-2. AI 检测到未配置 `HUADAI_API_KEY` / `HUADAI_USER_UUID`
+2. AI 检测到未配置 `HUADAI_API_KEY`
 3. AI 生成授权链接（verification_uri）并提示你完成授权
-4. 授权成功后自动写入 `HUADAI_API_KEY` 与 `HUADAI_USER_UUID`，继续执行你的请求
+4. 授权成功后自动写入 `HUADAI_API_KEY`，继续执行你的请求
 
 ### 手动配置（可选）
 
@@ -108,7 +108,6 @@ curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/package
 
 - `HUADAI_BASE_URL`: `https://openapi.ihuadai.cn/open/api/v1`
 - `HUADAI_API_KEY`: OAuth 换取的 `api_key`
-- `HUADAI_USER_UUID`: OAuth 返回的用户 `unique_id`（对应请求头 `USER-UUID`）
 - `HUADAI_CLIENT_ID`: 可选覆盖；默认使用服务端预注册 `client_id`
 
 此 Skill 需要在运行环境中提供以下环境变量（不要在聊天中粘贴任何密钥）：
@@ -116,7 +115,6 @@ curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/package
 - `HUADAI_BASE_URL`（必填）：话袋 OpenAPI 根地址（例如 `https://openapi.ihuadai.cn/open/api/v1`）
 - `HUADAI_CLIENT_ID`（可选覆盖，仅 OAuth）：OAuth Device Flow 的应用标识（申请设备码/换取 API Key；流程见 [OAuth 授权配置](references/oauth.md)）
 - `HUADAI_API_KEY`（必填）：业务 API 调用鉴权（请求头 `Authorization`）
-- `HUADAI_USER_UUID`（强烈建议，群聊/多人场景必配）：用户唯一标识
 
 ## Base URL 与接口路径
 
@@ -127,7 +125,6 @@ curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/package
 
 - 不在对话中索取、输出或回显任何 `HUADAI_API_KEY`
 - 所有读写都必须通过 API 获取结果，禁止编造“已保存/已找到”
-- 开启 `HUADAI_USER_UUID` 时，非 user 的请求必须拒绝并提示原因
 
 ---
 
@@ -143,5 +140,4 @@ curl -sL https://raw.githubusercontent.com/monkeyDB/hd_notes_skills/main/package
 ## License
 
 见 `LICENSE`。
-
 

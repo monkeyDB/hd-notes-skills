@@ -15,7 +15,6 @@ metadata:
       - HUADAI_BASE_URL
       - HUADAI_API_KEY
       - HUADAI_CLIENT_ID
-      - HUADAI_USER_UUID
     baseUrl: "https://openapi.ihuadai.cn/open/api/v1"
     homepage: "https://ihuadai.cn"
 ---
@@ -27,16 +26,12 @@ metadata:
 
 - **唯一 Base URL**：`https://openapi.ihuadai.cn/open/api/v1`（禁止使用其他域名或自行拼接根域）
 - **开放 API 文档**：以话袋官方发布为准（此仓库以 `references/` 内文档为最终对接依据）
-- **鉴权与必需请求头**：`HUADAI_API_KEY`**（`Authorization`）及 **`HUADAI_USER_UUID`**（`USER-UUID`，与话袋用户 `unique_id` 一致）
+- **鉴权与必需请求头**：`HUADAI_API_KEY`（对应请求头 `Authorization`）
 - **OAuth（设备码）**：按 [OAuth 授权配置](references/oauth.md) 执行；默认使用服务端预注册的固定 `client_id`，一般**只需要**配置 `HUADAI_BASE_URL` 即可走授权。仅在需要覆盖时才配置 `HUADAI_CLIENT_ID`。
-- **调用前检查配置**：若未配置 `HUADAI_API_KEY` / `HUADAI_USER_UUID`（业务请求）或未配置 `HUADAI_BASE_URL`（走 OAuth 时），必须停止调用并引导用户在本地配置；禁止假装成功
+- **调用前检查配置**：若未配置 `HUADAI_API_KEY`（业务请求）或未配置 `HUADAI_BASE_URL`（走 OAuth 时），必须停止调用并引导用户在本地配置；禁止假装成功
 - **数据真实性**：所有笔记内容、列表、详情都必须来自 API 响应；禁止编造笔记、ID、space_id 等
 - **空结果处理**：API 返回为空/未找到时，必须明确告知“未找到”，并给出下一步（换关键词/缩小范围）
 - **写操作确认**：保存/更新等写操作，必须在 API 明确返回成功后再回复“已保存/已更新”
-- **群聊/多人限制（若配置 `HUADAI_USER_UUID`）**：
-  - `HUADAI_USER_UUID` 与话袋 **`unique_id`** 一致，用于在多人聊天中划定「仅该用户」的笔记边界，保证私密性
-  - 当请求者身份无法与 `HUADAI_USER_UUID` 匹配时，必须拒绝访问任何笔记内容与搜索结果
-  - 拒绝时只说明需要由 owner 发起请求，不泄露任何数据
 
 ---
 
@@ -90,4 +85,3 @@ metadata:
 - 不输出任何可能识别用户身份的敏感信息（除非用户明确提供并要求使用）
 - 禁止在未调用 API 时返回“已保存/已删除/已找到”
 - 禁止猜测或生成不存在的笔记 ID
-

@@ -13,11 +13,9 @@
 
 ## 统一鉴权与请求头
 
-- **`USER-UUID`**：与话袋用户 **`unique_id`** 一致，用于对用户做唯一标识与数据归属；在 Skill 等多端场景中可配合配置用于多人聊天下的身份边界与私密性。
 - **`Authorization`（API Key）**：用于调用方**身份校验与鉴权登录**，证明请求来自已授权用户。
 
 - **必填 Headers（所有受保护接口）**
-  - `USER-UUID: <unique_id>`：用户唯一标识
   - `Authorization: <api_key>`：API Key（鉴权登录）
   - `X-Request-Id: <uuid>`：请求追踪（建议；写操作强烈建议）
   - `Content-Type: application/json`：POST/PUT 一般需要
@@ -158,7 +156,6 @@
 ```bash
 # 1. 新建笔记
 curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/upload-block' \
-  -H 'USER-UUID: {user_uuid}' \    
   -H 'Authorization: {api_key}' \
   -H 'X-Request-Id: {uuid}' \
   -H 'Content-Type: application/json' \
@@ -175,7 +172,6 @@ curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/upload-block' \
 
 # 2. 更新笔记（内容/属性）
 curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/update-block' \
-  -H 'USER-UUID: {user_uuid}' \  
   -H 'Authorization: {api_key}' \
   -H 'X-Request-Id: {uuid}' \
   -H 'Content-Type: application/json' \
@@ -189,6 +185,5 @@ curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/update-block' \
 
 # 3. 搜索笔记 
 curl -sS -X GET 'https://openapi.ihuadai.cn/open/api/v1/search?query=hello&page=1&size=10' \
-  -H 'USER-UUID: {user_uuid}' \
   -H 'Authorization: {api_key}'
 ```

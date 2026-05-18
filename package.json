@@ -16,8 +16,7 @@
     "optionalEnv": [
       "HUADAI_BASE_URL",
       "HUADAI_CLIENT_ID",
-      "HUADAI_API_KEY",
-      "HUADAI_USER_UUID"
+      "HUADAI_API_KEY"
     ]
   }
 }
