@@ -1,10 +1,25 @@
 {
-  "slug": "huadai-notes",
+  "slug": "hd-notes-skills",
   "name": "话袋笔记",
-  "owner": "huadai",
-  "version": "0.1.0",
-  "description": "话袋笔记 OpenClaw Skill：通过 AI 新建、更新和搜索个人笔记；使用话袋开放 API Key 鉴权。",
-  "homepage": "https://ihuadai.cn",
+  "owner": "monkeydb",
+  "version": "1.0.0",
+  "description": "话袋笔记 Skill：通过话袋 OpenAPI 新建、更新和搜索个人笔记。",
+  "homepage": "https://github.com/monkeyDB/hd-notes-skills",
+  "marketplaces": {
+    "clawhub": "https://clawhub.ai/monkeydb/hd-notes-skills"
+  },
+  "repository": "https://github.com/monkeyDB/hd-notes-skills",
   "license": "MIT-0",
-  "keywords": ["话袋", "huadai", "笔记", "notes", "openclaw", "skill", "知识库"]
+  "keywords": [
+    "话袋",
+    "huadai",
+    "笔记",
+    "notes",
+    "skill",
+    "openclaw",
+    "clawhub",
+    "skillhub",
+    "agent",
+    "hd-notes-skills"
+  ]
 }
