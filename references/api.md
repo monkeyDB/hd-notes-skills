@@ -1,6 +1,6 @@
 # API 参考
 
-**Base URL**：`https://test-openapi.ihuadai.cn/open/api/v1`
+**Base URL**：`https://openapi.ihuadai.cn/open/api/v1`
 **鉴权**：请求头 `Authorization: <HUADAI_API_KEY>`
 
 所有业务 API 都返回统一 JSON。成功以 `code=200` 为准。
@@ -8,14 +8,14 @@
 ## 搜索笔记
 
 ```http
-GET https://test-openapi.ihuadai.cn/open/api/v1/search?query={关键词}&page=1&size=10
+GET https://openapi.ihuadai.cn/open/api/v1/search?query={关键词}&page=1&size=10
 Authorization: <HUADAI_API_KEY>
 ```
 
 curl 示例：
 
 ```bash
-curl -sS -G "https://test-openapi.ihuadai.cn/open/api/v1/search" \
+curl -sS -G "https://openapi.ihuadai.cn/open/api/v1/search" \
   --data-urlencode "query=早起看书" \
   --data-urlencode "page=1" \
   --data-urlencode "size=10" \
@@ -72,14 +72,14 @@ curl -sS -G "https://test-openapi.ihuadai.cn/open/api/v1/search" \
 ## 获取笔记详情
 
 ```http
-GET https://test-openapi.ihuadai.cn/open/api/v1/block/{unique_id}
+GET https://openapi.ihuadai.cn/open/api/v1/block/{unique_id}
 Authorization: <HUADAI_API_KEY>
 ```
 
 curl 示例：
 
 ```bash
-curl -sS "https://test-openapi.ihuadai.cn/open/api/v1/block/b_1730000000_a1b2c3d4" \
+curl -sS "https://openapi.ihuadai.cn/open/api/v1/block/b_1730000000_a1b2c3d4" \
   -H "Authorization: $HUADAI_API_KEY"
 ```
 
@@ -93,7 +93,7 @@ curl -sS "https://test-openapi.ihuadai.cn/open/api/v1/block/b_1730000000_a1b2c3d
 ## 新建笔记
 
 ```http
-POST https://test-openapi.ihuadai.cn/open/api/v1/block/upload-block
+POST https://openapi.ihuadai.cn/open/api/v1/block/upload-block
 Authorization: <HUADAI_API_KEY>
 Content-Type: application/json
 ```
@@ -129,7 +129,7 @@ Content-Type: application/json
 curl 示例：
 
 ```bash
-curl -sS -X POST "https://test-openapi.ihuadai.cn/open/api/v1/block/upload-block" \
+curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/upload-block" \
   -H "Authorization: $HUADAI_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"unique_id":"b_1730000000_a1b2c3d4","type":1,"content":"正文\n","create_time":1717142400,"status":1}'
@@ -145,7 +145,7 @@ curl -sS -X POST "https://test-openapi.ihuadai.cn/open/api/v1/block/upload-block
 ## 更新笔记
 
 ```http
-POST https://test-openapi.ihuadai.cn/open/api/v1/block/update-block
+POST https://openapi.ihuadai.cn/open/api/v1/block/update-block
 Authorization: <HUADAI_API_KEY>
 Content-Type: application/json
 ```
@@ -179,7 +179,7 @@ Content-Type: application/json
 curl 示例：
 
 ```bash
-curl -sS -X POST "https://test-openapi.ihuadai.cn/open/api/v1/block/update-block" \
+curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/update-block" \
   -H "Authorization: $HUADAI_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"unique_id":"b_xxx","type":1,"content":"更新后的完整正文\n","status":1}'

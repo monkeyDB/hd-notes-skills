@@ -22,7 +22,7 @@ metadata:
       - name: HUADAI_API_KEY
         required: true
         description: 话袋开放平台 API Key（请求头 Authorization）
-    baseUrl: "https://test-openapi.ihuadai.cn/open/api/v1"
+    baseUrl: "https://openapi.ihuadai.cn/open/api/v1"
     homepage: "https://clawhub.ai/monkeydb/hd-notes-skills"
     repository: "https://github.com/monkeyDB/hd-notes-skills"
 ---
@@ -31,9 +31,9 @@ metadata:
 
 ## Agent 必读约束
 
-- **唯一 Base URL**：`https://test-openapi.ihuadai.cn/open/api/v1`。禁止使用其他域名，禁止重复拼接 `/open/api/v1`。
+- **唯一 Base URL**：`https://openapi.ihuadai.cn/open/api/v1`。禁止使用其他域名，禁止重复拼接 `/open/api/v1`。
 - **鉴权方式**：业务 API 仅使用请求头 `Authorization: <HUADAI_API_KEY>`。
-- **API Key 来源**：用户需先在 [话袋开放平台](https://test.ihuadai.cn/desktop/openai) 创建 API Key。如果用户未配置，优先引导走 OAuth 授权流程（见下方「OAuth 授权」章节）。
+- **API Key 来源**：用户需先在 [话袋开放平台](https://ihuadai.cn/desktop/openai) 创建 API Key。如果用户未配置，优先引导走 OAuth 授权流程（见下方「OAuth 授权」章节）。
 - **数据真实性**：所有笔记内容、搜索结果、笔记 ID 都必须来自 API 响应。禁止编造「已保存」「已找到」「已更新」。
 - **写操作确认**：只有 API 返回 `code=200` 后，才能回复用户已保存或已更新。
 - **更新笔记约束**：`unique_id` 必须来自搜索结果或用户明确提供，禁止猜测或生成已有笔记 ID。
@@ -57,7 +57,7 @@ OAuth 工作流：
 4. 拿到 token 后，将其配置到环境变量 `HUADAI_API_KEY`
 
 如果 OAuth 授权失败或用户偏好手动配置，引导用户：
-- 打开 https://test.ihuadai.cn/desktop/openai 创建 API Key
+- 打开 https://ihuadai.cn/desktop/openai 创建 API Key
 - 设置环境变量：`export HUADAI_API_KEY=<你的Key>`
 
 ## 文档索引
@@ -95,7 +95,7 @@ OAuth 工作流：
 | POST | `/block/upload-block` | 新建笔记 |
 | POST | `/block/update-block` | 更新笔记 |
 
-完整 URL 等于 Base URL + 路径。例如：`https://test-openapi.ihuadai.cn/open/api/v1/search`。
+完整 URL 等于 Base URL + 路径。例如：`https://openapi.ihuadai.cn/open/api/v1/search`。
 
 ## 执行规则
 

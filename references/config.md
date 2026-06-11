@@ -18,7 +18,7 @@
 ### 2) 建议通过环境变量注入（推荐）
 
 - `HUADAI_API_KEY`（必填）：对应请求头 `Authorization`，用于鉴权登录
-- `HUADAI_BASE_URL`（必填）：话袋 OpenAPI 根地址（例如 `https://test-openapi.ihuadai.cn/open/api/v1`
+- `HUADAI_BASE_URL`（必填）：话袋 OpenAPI 根地址（例如 `https://openapi.ihuadai.cn/open/api/v1`
 - `HUADAI_CLIENT_ID`（可选覆盖，仅 OAuth）：OAuth Device Flow 的应用标识（用于申请设备码与轮询换取 `HUADAI_API_KEY`；详见 [OAuth 授权配置（话袋笔记）](oauth.md)）
 
 ## 配置原则（必须遵守）
@@ -34,7 +34,7 @@
       "huadai-notes-skill": {
         "env": {
           "HUADAI_API_KEY": "hk_live_****",
-          "HUADAI_BASE_URL": "https://test-openapi.ihuadai.cn/open/api/v1"
+          "HUADAI_BASE_URL": "https://openapi.ihuadai.cn/open/api/v1"
         }
       }
     }

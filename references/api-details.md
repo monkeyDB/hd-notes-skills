@@ -155,7 +155,7 @@
 
 ```bash
 # 1. 新建笔记
-curl -sS -X POST 'https://test-openapi.ihuadai.cn/open/api/v1/block/upload-block' \
+curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/upload-block' \
   -H 'Authorization: {api_key}' \
   -H 'X-Request-Id: {uuid}' \
   -H 'Content-Type: application/json' \
@@ -171,7 +171,7 @@ curl -sS -X POST 'https://test-openapi.ihuadai.cn/open/api/v1/block/upload-block
   }'
 
 # 2. 更新笔记（内容/属性）
-curl -sS -X POST 'https://test-openapi.ihuadai.cn/open/api/v1/block/update-block' \
+curl -sS -X POST 'https://openapi.ihuadai.cn/open/api/v1/block/update-block' \
   -H 'Authorization: {api_key}' \
   -H 'X-Request-Id: {uuid}' \
   -H 'Content-Type: application/json' \
@@ -184,6 +184,6 @@ curl -sS -X POST 'https://test-openapi.ihuadai.cn/open/api/v1/block/update-block
   }'
 
 # 3. 搜索笔记 
-curl -sS -X GET 'https://test-openapi.ihuadai.cn/open/api/v1/search?query=hello&page=1&size=10' \
+curl -sS -X GET 'https://openapi.ihuadai.cn/open/api/v1/search?query=hello&page=1&size=10' \
   -H 'Authorization: {api_key}'
 ```
