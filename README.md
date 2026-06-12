@@ -56,7 +56,7 @@ AI 会引导你在浏览器中打开验证页面、输入验证码确认即可�
 
 ### 方式二：手动配置 API Key
 
-1. 打开 [话袋开放平台](https://ihuadai.cn/desktop/openai)
+1. 打开 [话袋开放平台](https://test.ihuadai.cn/desktop/openai)
 2. 创建 API Key
 3. 在 Agent 运行环境中配置环境变量：
 
@@ -122,7 +122,7 @@ Authorization: <HUADAI_API_KEY>
 Base URL：
 
 ```text
-https://openapi.ihuadai.cn/open/api/v1
+https://test-openapi.ihuadai.cn/open/api/v1
 ```
 
 | 方法 | 路径 | 说明 |
@@ -156,8 +156,8 @@ https://openapi.ihuadai.cn/open/api/v1
 
 - [GitHub地址](https://github.com/monkeyDB/hd-notes-skills)
 - [ClawHub商店地址](https://clawhub.ai/monkeydb/hd-notes-skills)
-- [话袋开放平台](https://ihuadai.cn/desktop/openai)
-- [话袋官网](https://ihuadai.cn)
+- [话袋开放平台](https://test.ihuadai.cn/desktop/openai)
+- [话袋官网](https://test.ihuadai.cn)
 
 ## License
 

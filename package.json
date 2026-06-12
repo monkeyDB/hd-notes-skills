@@ -29,7 +29,7 @@
   },
   "openclaw": {
     "minVersion": "0.1.0",
-    "baseUrl": "https://openapi.ihuadai.cn/open/api/v1",
+    "baseUrl": "https://test-openapi.ihuadai.cn/open/api/v1",
     "requires": {
       "env": [
         "HUADAI_API_KEY"

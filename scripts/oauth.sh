@@ -17,7 +17,7 @@
 # ============================================================
 set -euo pipefail
 
-BASE_URL="${HUADAI_BASE_URL:-https://openapi.ihuadai.cn/open/api/v1}"
+BASE_URL="${HUADAI_BASE_URL:-https://test-openapi.ihuadai.cn/open/api/v1}"
 
 # --- 步聚 1：获取设备码 ---
 echo "📡 正在请求设备授权码..."
@@ -26,7 +26,7 @@ DEVICE_RESP=$(curl -sS -X POST "$BASE_URL/oauth/device/code" \
 
 DEVICE_CODE=$(echo "$DEVICE_RESP" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("data",{}).get("device_code",""))' 2>/dev/null || echo "")
 USER_CODE=$(echo "$DEVICE_RESP" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("data",{}).get("user_code",""))' 2>/dev/null || echo "")
-VERIFICATION_URI=$(echo "$DEVICE_RESP" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("data",{}).get("verification_uri","https://ihuadai.cn/desktop/openai"))' 2>/dev/null || echo "https://ihuadai.cn/desktop/openai")
+VERIFICATION_URI=$(echo "$DEVICE_RESP" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("data",{}).get("verification_uri","https://test.ihuadai.cn/desktop/openai"))' 2>/dev/null || echo "https://test.ihuadai.cn/desktop/openai")
 INTERVAL=$(echo "$DEVICE_RESP" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("data",{}).get("interval",5))' 2>/dev/null || echo "5")
 
 if [ -z "$DEVICE_CODE" ]; then
@@ -34,7 +34,7 @@ if [ -z "$DEVICE_CODE" ]; then
   echo "   后端响应: $DEVICE_RESP"
   echo ""
   echo "   你也可以手动配置 API Key："
-  echo "   1. 打开 https://ihuadai.cn/desktop/openai"
+  echo "   1. 打开 https://test.ihuadai.cn/desktop/openai"
   echo "   2. 创建 API Key"
   echo "   3. 设置环境变量: export HUADAI_API_KEY=<你的Key>"
   exit 1
@@ -95,7 +95,7 @@ echo ""
 echo "⏰ 授权超时。请重新运行 ./scripts/oauth.sh 获取新的验证码。"
 echo ""
 echo "   也可以手动配置 API Key："
-echo "   1. 打开 https://ihuadai.cn/desktop/openai"
+echo "   1. 打开 https://test.ihuadai.cn/desktop/openai"
 echo "   2. 创建 API Key"
 echo "   3. 执行: export HUADAI_API_KEY=<你的Key>"
 exit 1

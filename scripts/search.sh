@@ -11,7 +11,7 @@
 # ============================================================
 set -euo pipefail
 
-BASE_URL="${HUADAI_BASE_URL:-https://openapi.ihuadai.cn/open/api/v1}"
+BASE_URL="${HUADAI_BASE_URL:-https://test-openapi.ihuadai.cn/open/api/v1}"
 API_KEY="${HUADAI_API_KEY:-}"
 
 # --- 参数解析 ---
@@ -25,7 +25,7 @@ if [ -z "$QUERY" ]; then
 fi
 
 if [ -z "$API_KEY" ]; then
-  echo '{"error":"未配置 HUADAI_API_KEY 环境变量。请先在话袋开放平台 https://ihuadai.cn/desktop/openai 创建 API Key"}'
+  echo '{"error":"未配置 HUADAI_API_KEY 环境变量。请先在话袋开放平台 https://test.ihuadai.cn/desktop/openai 创建 API Key"}'
   exit 1
 fi
 
@@ -57,7 +57,7 @@ except:
 
 if data.get("code") == 400001:
     print("❌ API Key 无效，请重新创建或配置。")
-    print("   打开 https://ihuadai.cn/desktop/openai 创建 Key")
+    print("   打开 https://test.ihuadai.cn/desktop/openai 创建 Key")
     sys.exit(1)
 
 if data.get("code") != 200:

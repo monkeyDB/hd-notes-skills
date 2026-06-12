@@ -22,7 +22,7 @@
 
 ## 手动配置（可选）
 
-1. 前往 [话袋开放平台](https://ihuadai.cn/openapi) 创建应用
+1. 前往 [话袋开放平台](https://test.ihuadai.cn/openapi) 创建应用
 2. 获取 **`api_key`**。
 3. 在 `~/.openclaw/openclaw.json`（或当前环境的 Skill 配置）中注入环境变量，**不要在聊天中回显密钥**：
 
@@ -32,7 +32,7 @@
     "entries": {
       "huadai-notes-skill": {
         "env": {
-          "HUADAI_BASE_URL": "https://openapi.ihuadai.cn/open/api/v1",
+          "HUADAI_BASE_URL": "https://test-openapi.ihuadai.cn/open/api/v1",
           "HUADAI_API_KEY": "hk_live_你的key"
         }
       }
@@ -50,7 +50,7 @@
 ### 步骤 1：申请授权码
 
 ```
-POST https://openapi.ihuadai.cn/open/api/v1/oauth/device/code
+POST https://test-openapi.ihuadai.cn/open/api/v1/oauth/device/code
 Content-Type: application/json
 ```
 
@@ -81,7 +81,7 @@ Content-Type: application/json
   "message": "请求成功",
   "data": {
     "code": "abc123...",
-    "verification_uri": "https://test-openapi.ihuadai.cn/api/v1/oauth/authorize?code=abc123...",
+    "verification_uri": "https://test.ihuadai.cn/desktop/openai",
     "user_code": "ABCD-1234",
     "expires_in": 600,
     "interval": 5
@@ -117,10 +117,10 @@ POST {HUADAI_BASE_URL}/oauth/token
 Content-Type: application/json
 ```
 
-其中 `{HUADAI_BASE_URL}` 须与步骤 1 一致（例如 `https://openapi.ihuadai.cn/open/api/v1`），完整示例：
+其中 `{HUADAI_BASE_URL}` 须与步骤 1 一致（例如 `https://test-openapi.ihuadai.cn/open/api/v1`），完整示例：
 
 ```
-POST https://openapi.ihuadai.cn/open/api/v1/oauth/token
+POST https://test-openapi.ihuadai.cn/open/api/v1/oauth/token
 Content-Type: application/json
 ```
 
@@ -144,7 +144,7 @@ Content-Type: application/json
 **推荐使用本 Skill 自带脚本**（仓库内路径：`scripts/oauth_poll.py`）：
 
 ```bash
-export HUADAI_BASE_URL="https://openapi.ihuadai.cn/open/api/v1"
+export HUADAI_BASE_URL="https://test-openapi.ihuadai.cn/open/api/v1"
 # 可选：export HUADAI_CLIENT_ID="你的 client_id"
 result=$(python scripts/oauth_poll.py "{data.code}")
 api_key=$(echo "$result" | jq -r '.api_key')
@@ -159,7 +159,7 @@ api_key=$(echo "$result" | jq -r '.api_key')
 exec: python scripts/oauth_poll.py "{code}"
   background: true
   env:
-    HUADAI_BASE_URL: "https://openapi.ihuadai.cn/open/api/v1"
+    HUADAI_BASE_URL: "https://test-openapi.ihuadai.cn/open/api/v1"
     # 可选：HUADAI_CLIENT_ID: "你的 client_id"
 
 process: poll
