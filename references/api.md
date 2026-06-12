@@ -106,7 +106,9 @@ Content-Type: application/json
   "type": 1,
   "content": "正文\n",
   "create_time": 1717142400,
-  "status": 1
+  "status": 1,
+  "is_collect": 0,
+  "is_todo": 0
 }
 ```
 
@@ -132,7 +134,7 @@ curl 示例：
 curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/upload-block" \
   -H "Authorization: $HUADAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"unique_id":"b_1730000000_a1b2c3d4","type":1,"content":"正文\n","create_time":1717142400,"status":1}'
+  -d '{"unique_id":"b_1730000000_a1b2c3d4","type":1,"content":"正文\n","create_time":1717142400,"status":1,"is_collect":0,"is_todo":0}'
 ```
 
 执行要求：
@@ -157,7 +159,9 @@ Content-Type: application/json
   "unique_id": "b_xxx",
   "type": 1,
   "content": "更新后的完整正文\n",
-  "status": 1
+  "status": 1,
+  "is_collect": 0,
+  "is_todo": 0
 }
 ```
 
@@ -182,7 +186,7 @@ curl 示例：
 curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/update-block" \
   -H "Authorization: $HUADAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"unique_id":"b_xxx","type":1,"content":"更新后的完整正文\n","status":1}'
+  -d '{"unique_id":"b_xxx","type":1,"content":"更新后的完整正文\n","status":1,"is_collect":0,"is_todo":0}'
 ```
 
 执行要求：

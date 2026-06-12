@@ -90,9 +90,6 @@ Authorization: <HUADAI_API_KEY>
 ### 记录想法
 
 ```text
-
-
-
 记一下：以后可以试试每天早起 30 分钟看书，提高专注力。
 ```
 

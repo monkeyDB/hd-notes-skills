@@ -2,7 +2,7 @@
   "slug": "hd-notes-skills",
   "name": "话袋笔记",
   "owner": "monkeydb",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "话袋笔记 Skill：通过话袋 OpenAPI 新建、更新和搜索个人笔记。",
   "homepage": "https://github.com/monkeyDB/hd-notes-skills",
   "marketplaces": {
