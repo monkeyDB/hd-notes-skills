@@ -35,7 +35,7 @@ curl -sS -G "https://openapi.ihuadai.cn/open/api/v1/search" \
     "size": 10,
     "data": [
       {
-        "unique_id": "b_1730000000_a1b2c3d4",
+        "unique_id": "01jarxm7vndstx68m7qpr1ws5w5xa2b",
         "type": 1,
         "content": [{ "insert": "笔记正文内容..." }],
         "create_time": 1720000000,
@@ -79,7 +79,7 @@ Authorization: <HUADAI_API_KEY>
 curl 示例：
 
 ```bash
-curl -sS "https://openapi.ihuadai.cn/open/api/v1/block/b_1730000000_a1b2c3d4" \
+curl -sS "https://openapi.ihuadai.cn/open/api/v1/block/01jarxm7vndstx68m7qpr1ws5w5xa2b" \
   -H "Authorization: $HUADAI_API_KEY"
 ```
 
@@ -102,7 +102,6 @@ Content-Type: application/json
 
 ```json
 {
-  "unique_id": "b_1730000000_a1b2c3d4",
   "type": 1,
   "content": "正文\n",
   "create_time": 1717142400,
@@ -112,11 +111,12 @@ Content-Type: application/json
 }
 ```
 
+> `unique_id` 由服务端自动生成，**不要传**（或传空字符串 `""`）。格式与用户手动创建一致。
+
 兼容请求体。`content` 也可以传 Quill Delta ops：
 
 ```json
 {
-  "unique_id": "b_1730000000_a1b2c3d4",
   "type": 1,
   "content": [
     {
@@ -134,12 +134,12 @@ curl 示例：
 curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/upload-block" \
   -H "Authorization: $HUADAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"unique_id":"b_1730000000_a1b2c3d4","type":1,"content":"正文\n","create_time":1717142400,"status":1,"is_collect":0,"is_todo":0}'
+  -d '{"type":1,"content":"正文\n","create_time":1717142400,"status":1,"is_collect":0,"is_todo":0}'
 ```
 
 执行要求：
 
-- `unique_id` 必须是新生成的笔记 ID。
+- `unique_id` **不要传**，由服务端自动生成。
 - 普通文本笔记使用 `type=1`。
 - `create_time` 使用当前 Unix 秒。
 - 只有响应 `code=200` 后，才能回复「已保存」。
@@ -156,7 +156,7 @@ Content-Type: application/json
 
 ```json
 {
-  "unique_id": "b_xxx",
+  "unique_id": "01jarxm7vndstx68m7qpr1ws5w5xa2b",
   "type": 1,
   "content": "更新后的完整正文\n",
   "status": 1,
@@ -169,7 +169,7 @@ Content-Type: application/json
 
 ```json
 {
-  "unique_id": "b_xxx",
+  "unique_id": "01jarxm7vndstx68m7qpr1ws5w5xa2b",
   "type": 1,
   "content": [
     {
@@ -186,7 +186,7 @@ curl 示例：
 curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/update-block" \
   -H "Authorization: $HUADAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"unique_id":"b_xxx","type":1,"content":"更新后的完整正文\n","status":1,"is_collect":0,"is_todo":0}'
+  -d '{"unique_id":"01jarxm7vndstx68m7qpr1ws5w5xa2b","type":1,"content":"更新后的完整正文\n","status":1,"is_collect":0,"is_todo":0}'
 ```
 
 执行要求：
