@@ -50,13 +50,7 @@ Agent 执行：
 ./scripts/oauth.sh
 ```
 
-OAuth 工作流：
-1. 脚本调用 `POST /open/api/v1/oauth/device/code` 获取 device_code、user_code、验证地址
-2. 提示用户打开验证页面，输入 user_code 并确认授权
-3. 脚本轮询 `POST /open/api/v1/oauth/token`，等待用户确认
-4. 拿到 token 后，将其配置到环境变量 `HUADAI_API_KEY`
-
-如果 OAuth 授权失败或用户偏好手动配置，引导用户：
+脚本自动完成设备码获取、用户授权、token 轮询全流程。OAuth 失败时引导用户：
 - 打开 https://ihuadai.cn/desktop/openai 创建 API Key
 - 设置环境变量：`export HUADAI_API_KEY=<你的Key>`
 
@@ -64,39 +58,22 @@ OAuth 工作流：
 
 | 文档 | 内容 | 何时读取 |
 |------|------|----------|
-| [API 参考](references/api.md) | 完整请求体、curl 示例、响应判断、错误码 | 需要构造 API 调用或处理错误时 |
-| [对话示例](references/examples.md) | 完整端到端对话示范（含搜索确认、搜索结果为空等边界） | 不确定某场景该怎么做时 |
+| [API 参考](references/api.md) | 请求/响应格式、curl 示例、错误码、端到端对话示例 | 需要构造 API 调用或参考完整对话时 |
 
-## 指令路由表
+## 路由表
 
-| 指令 | 角色 | 说明 | 详细文档 |
-|------|------|------|----------|
-| `/huadai oauth` 或「授权话袋」 | 授权 | OAuth 设备授权，自动获取 token | [脚本](scripts/oauth.sh) |
-| `/huadai config` 或「配置话袋」 | 配置 | 引导用户到开放平台创建并配置 API Key | [API 参考](references/api.md) |
-| `/huadai upload` 或「记一下/保存」 | 新建 | 新建 Block 笔记 | [API 参考](references/api.md#新建笔记) |
-| `/huadai update` 或「更新笔记」 | 更新 | 搜索确认目标后更新 Block 内容 | [API 参考](references/api.md#更新笔记) |
-| `/huadai search` 或「搜一下」 | 搜索 | 关键词检索笔记 | [API 参考](references/api.md#搜索笔记) |
-
-## 自然语言路由
-
-| 用户说法（示例） | 路由 | 执行方式 |
-|------------------|------|----------|
+| 用户说（示例） | 操作 | 执行 |
+|--------------|------|------|
 | 「授权话袋」「连接话袋笔记」 | OAuth | 执行 `./scripts/oauth.sh` |
-| 「配置话袋」「怎么填 Key」 | Config | 不调用业务 API，引导配置 `HUADAI_API_KEY` |
-| 「新建/上传/保存/写入到笔记」「记一下」 | Upload | `POST /block/upload-block` |
-| 「更新/修改笔记」「补充到这条」 | Update | 先确认 `unique_id`，再 `POST /block/update-block` |
-| 「搜/找/检索/有哪些相关笔记」 | Search | `GET /search` |
+| 「配置话袋」「怎么填 Key」 | Config | 引导用户创建 API Key |
+| 「记一下」「保存」`/huadai upload` | 新建笔记 | `POST /block/upload-block` |
+| 「更新笔记」「补充到这条」`/huadai update` | 更新笔记 | 先搜索确认 → `POST /block/update-block` |
+| 「搜一下」「找找笔记」`/huadai search` | 搜索笔记 | `GET /search` |
+| 「收藏这条」「收藏一下」 | 收藏笔记 | 先搜索获取完整内容 → `POST /block/update-block`，传 `"is_collect": 1` |
+| 「标为待办」「加个待办」 | 标待办 | 先搜索获取完整内容 → `POST /block/update-block`，传 `"is_todo": 1` |
+| 「打开这条笔记」「笔记详情」 | 查看详情 | `GET /block/:unique_id` |
 
-## API 路由表
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/search` | 关键词搜索笔记 |
-| GET | `/block/:unique_id` | 获取单条笔记详情 |
-| POST | `/block/upload-block` | 新建笔记 |
-| POST | `/block/update-block` | 更新笔记 |
-
-完整 URL 等于 Base URL + 路径。例如：`https://openapi.ihuadai.cn/open/api/v1/search`。
+完整 URL = `https://openapi.ihuadai.cn/open/api/v1` + 路径。接口详情见 [API 参考](references/api.md)。
 
 ## 执行规则
 
@@ -121,7 +98,9 @@ OAuth 工作流：
 
 - **不要传 `unique_id` 字段**（或传空字符串 `""`），由服务端自动生成与手动操作一致的笔记 ID。
 - 普通文本笔记使用 `type=1`。
-- `content` 直接传 Markdown 字符串。后端会自动转为 Quill Delta，无需手动构建数组。
+- `content` 支持两种格式：
+  - **Markdown 字符串**：纯文本、加粗、斜体、表格等。如 `"正文 **加粗**\n"` 或 `"\| 列1 \| 列2 \|\n\|..."`
+  - **Quill Delta 数组**：含链接时使用。如 `[{"insert":"点击","attributes":{"type":"link","link":"https://..."}},...]`
 - `create_time` 使用当前 Unix 秒。
 - `status=1` 表示正常笔记。
 - `is_collect=0` 表示非收藏笔记（`0`=否 `1`=是）。
@@ -131,28 +110,24 @@ OAuth 工作流：
 
 - 更新前必须确认目标 `unique_id`。
 - 如果用户没有提供明确 `unique_id`，先搜索，再让用户确认或选择最匹配的一条。
-- `content` 传更新后的完整 Markdown 字符串。
+- `type` 传原笔记类型（通常为 `1`）。`content` 传更新后的完整 Markdown 字符串。
 - 不要只发送「追加内容」并假装已合并，除非 API 请求体确实包含最终要保存的内容。
+- 改正文时**不要传 `is_collect` 和 `is_todo`**，服务端会保留原有状态。收藏/取消收藏时传 `"is_collect": 1/0`，标待办/取消待办时传 `"is_todo": 1/0`，**同时必须带上完整正文**。
 
 ## 示例速查
 
-更多完整对话示例见 [对话示例](references/examples.md)。
+更多完整对话示例见 [API 参考](references/api.md)。
 
 ### 新建笔记
 
-用户：「记一下，明天下午3点开会」
+公共字段：`type:1` `status:1` `is_collect:0` `is_todo:0` `create_time` 为当前 Unix 秒，`unique_id` 不传。
 
-```json
-POST /block/upload-block
-{
-  "type": 1,
-  "content": "明天下午3点开会\n",
-  "create_time": 1717142400,
-  "status": 1,
-  "is_collect": 0,
-  "is_todo": 0
-}
-// unique_id 由服务端生成，不传
+content 示例：
+
+```
+纯文本 →  "明天下午3点开会\n"
+含表格 →  "| 日期 | 事项 |\n|------|------|\n| 周一 | 评审 |\n"
+含链接 →  [{"insert":"参考："},{"insert":"点击","attributes":{"type":"link","link":"https://..."}},{"insert":"\n"}]
 ```
 
 ### 更新笔记
@@ -162,7 +137,7 @@ POST /block/upload-block
 ```
 1. GET /search?query=开会  →  找到匹配笔记
 2. 向用户确认：「是要更新『明天下午3点开会』这条吗？」
-3. 用户确认 → POST /block/update-block  { "unique_id": "01j...", "content": "后天下午2点\n", ... }
+3. 用户确认 → POST /block/update-block  { "unique_id": "01j...", "type": 1, "content": "后天下午2点开会\n", "status": 1 }
 ```
 
 ## 脚本调用指引
@@ -183,7 +158,7 @@ POST /block/upload-block
 ./scripts/update.sh <unique_id> "新内容"
 ```
 
-Agent 可优先选择调用脚本而非手动拼接 curl。脚本已处理参数校验、错误处理和响应格式化。
+脚本已处理参数校验和错误处理，可直接调用。
 
 ## 通用错误处理
 
