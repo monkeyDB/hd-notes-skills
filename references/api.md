@@ -143,6 +143,7 @@ curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/upload-block" \
 - 普通文本笔记使用 `type=1`。
 - `create_time` 使用当前 Unix 秒。
 - 只有响应 `code=200` 后，才能回复「已保存」。
+- 响应中的 `block_unique_id` 即为笔记 ID，后续更新/查详情使用此值。
 
 ## 更新笔记
 
@@ -202,24 +203,11 @@ curl -sS -X POST "https://openapi.ihuadai.cn/open/api/v1/block/update-block" \
 | code | 含义 | 处理方式 |
 |------|------|----------|
 | 200 | 成功 | 写操作可回复已保存/已更新 |
-| 400001 | Key 无效 | 引导用户重新创建 API Key 或走 OAuth 授权流程 |
+| 400001 | Key 无效 | 引导用户重新创建 API Key |
 | 400003 | 无权限 | 告知无权限访问该资源 |
 | 400018 | 笔记不存在 | 提示重新搜索确认目标笔记 |
 | 400024 | 需有效会员 | 引导用户在话袋开通对应权益 |
 | 500000 | 系统错误 | 提示稍后重试 |
-
-## OAuth 授权
-
-本 Skill 支持 OAuth Device Flow（RFC 8628），用于自动获取 token。相关端点：
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/oauth/device/code` | 获取设备码和用户验证码 |
-| POST | `/oauth/token` | 轮询获取 access_token |
-| GET | `/oauth/authorize` | 用户确认授权页面 |
-| POST | `/oauth/device/approve` | 确认设备授权（需应用登录 token） |
-
-可使用 `scripts/oauth.sh` 自动化上述流程，无需手动调用这些端点。
 
 ## 安全要求
 
@@ -249,7 +237,7 @@ POST /open/api/v1/block/upload-block
 }
 ```
 
-**响应**：`{ "code": 200, "message": "成功" }`
+**响应**：`{ "code": 200, "data": { "block_unique_id": "01jarxm7vndstx68m7qpr1ws5w5xa2b", "is_completed": 0 } }`
 
 「已保存。」
 

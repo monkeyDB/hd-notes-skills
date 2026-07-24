@@ -33,26 +33,12 @@ metadata:
 
 - **唯一 Base URL**：`https://openapi.ihuadai.cn/open/api/v1`。禁止使用其他域名，禁止重复拼接 `/open/api/v1`。
 - **鉴权方式**：业务 API 仅使用请求头 `Authorization: <HUADAI_API_KEY>`。
-- **API Key 来源**：用户需先在 [话袋开放平台](https://ihuadai.cn/desktop/openai) 创建 API Key。如果用户未配置，优先引导走 OAuth 授权流程（见下方「OAuth 授权」章节）。
+- **API Key 来源**：用户需先在 [话袋开放平台](https://ihuadai.cn/desktop/openai) 创建 API Key 并配置环境变量 `HUADAI_API_KEY`。
 - **数据真实性**：所有笔记内容、搜索结果、笔记 ID 都必须来自 API 响应。禁止编造「已保存」「已找到」「已更新」。
+- **新建笔记响应**：`POST /block/upload-block` 返回 `block_unique_id`，即笔记唯一标识。后续更新/查详情都使用此 ID。
 - **写操作确认**：只有 API 返回 `code=200` 后，才能回复用户已保存或已更新。
 - **更新笔记约束**：`unique_id` 必须来自搜索结果或用户明确提供，禁止猜测或生成已有笔记 ID。
 - **密钥安全**：不要在对话中要求用户粘贴 API Key，不要回显、记录、总结或展示 `HUADAI_API_KEY`。
-
-## 快速开始：OAuth 授权（推荐）
-
-如果你还没有配置 `HUADAI_API_KEY`，可以引导用户走 OAuth 设备授权流程（零门槛，不需要复制粘贴 Key）：
-
-```
-用户说：「帮我授权话袋笔记」
-
-Agent 执行：
-./scripts/oauth.sh
-```
-
-脚本自动完成设备码获取、用户授权、token 轮询全流程。OAuth 失败时引导用户：
-- 打开 https://ihuadai.cn/desktop/openai 创建 API Key
-- 设置环境变量：`export HUADAI_API_KEY=<你的Key>`
 
 ## 文档索引
 
@@ -64,8 +50,7 @@ Agent 执行：
 
 | 用户说（示例） | 操作 | 执行 |
 |--------------|------|------|
-| 「授权话袋」「连接话袋笔记」 | OAuth | 执行 `./scripts/oauth.sh` |
-| 「配置话袋」「怎么填 Key」 | Config | 引导用户创建 API Key |
+| 「配置话袋」「怎么填 Key」 | Config | 引导用户到 [话袋开放平台](https://ihuadai.cn/desktop/openai) 创建 API Key |
 | 「记一下」「保存」`/huadai upload` | 新建笔记 | `POST /block/upload-block` |
 | 「更新笔记」「补充到这条」`/huadai update` | 更新笔记 | 先搜索确认 → `POST /block/update-block` |
 | 「搜一下」「找找笔记」`/huadai search` | 搜索笔记 | `GET /search` |
@@ -145,9 +130,6 @@ content 示例：
 本 Skill 提供了 `scripts/` 目录下的辅助脚本。在环境中配置了 `HUADAI_API_KEY` 后，可以直接执行：
 
 ```bash
-# OAuth 授权（用户未配置 Key 时首选）
-./scripts/oauth.sh
-
 # 搜索笔记
 ./scripts/search.sh "关键词"
 
@@ -165,7 +147,7 @@ content 示例：
 | code | 处理方式 |
 |------|----------|
 | 200 | 成功。写操作可回复已保存/已更新 |
-| 400001 | API Key 无效，引导用户重新创建或走 OAuth 授权 |
+| 400001 | API Key 无效，引导用户重新创建 API Key |
 | 400003 | 无权限访问该资源 |
 | 400018 | 笔记不存在，提示重新搜索确认 |
 | 400024 | 需要有效会员，引导用户在话袋开通对应权益 |
